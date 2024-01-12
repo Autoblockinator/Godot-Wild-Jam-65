@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://fhrxc3id4ykd"]
+
+[ext_resource type="TileSet" uid="uid://ci2edflnexlrp" path="res://Assets/DevTextures/DevTexturesTileSet.tres" id="1_ovpi6"]
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource("1_ovpi6")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 65537, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 131077, 0, 0, 131078, 0, 0, 131079, 0, 0, 131080, 0, 0, 65544, 0, 0, 65545, 0, 0)
