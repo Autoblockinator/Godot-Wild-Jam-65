@@ -2,56 +2,67 @@ extends CharacterBody2D
 class_name PlayerCharacter
 
 
+@onready var input: InputManager = get_node_or_null('/root/Main/Input')
+
+
 const SPEED = 300.0
 const ACCELERATION = 100.0
-const DECELERATION = 100.0
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-const JUMP_VELOCITY = -400.0
-var coyote_time: bool = true
-var movement_input: Dictionary = {
-	'up': false,
-	'down': false,
-	'left': false,
-	'right': false,
-}
+const TURNING_BOOST = 4.0
+const STOPPING_SPEED = 50.0
+const AIR_STOPPING_SPEED = 0.0
+const GRAVITY = 981
+const JUMP_POWER = -200.0
+const MAX_JUMP_HOLD = 1.0
+var can_jump: bool = true
+var gravity_mod: float = 1.0
+var gravity_tween: Tween = null
 
 
-func jump(): return
-
-
-func _physics_process(delta):
-	if !is_on_floor(): velocity.y += gravity * delta
-
-	var target_velocity = 0.0
-	if movement_input.right: target_velocity += SPEED
-	if movement_input.left:  target_velocity -= SPEED
-	
-	var accel = 0.0
-	if velocity.x != target_velocity:
-		if velocity.x < target_velocity:
-			accel = minf(
-				ACCELERATION * delta,
-				(target_velocity - velocity.x) * delta
-			)
-		elif velocity.x > target_velocity:
-			accel = maxf(
-				-accel * delta,
-				(target_velocity - velocity.x) * delta
-			)
-	
-	velocity.x += accel
-
-	move_and_slide()
+func _ready():
+	input.connect('jump_pressed', jump_pressed)
+	input.connect('jump_released', jump_released)
 	return
 
 
-func _unhandled_input(event):
-	if !(event is InputEventKey): return
-	var inputs: Dictionary = $/root/Main/Settings.input
+func _process(delta):
+	print(gravity_mod)
+	return
+
+
+func jump_pressed():
+	if !can_jump: return
+	can_jump = false
+	velocity.y = JUMP_POWER
+	gravity_mod = 0.0
+	gravity_tween = get_tree().create_tween()
+	gravity_tween.tween_property(self, 'gravity_mod', 1.0, MAX_JUMP_HOLD)
+	return
+
+func jump_released():
+	if gravity_tween != null: gravity_tween.stop()
+	gravity_mod = 1.0
+	return
+
+
+func _physics_process(delta):
+	if is_on_floor():
+		if !input.jump_down(): can_jump = true
+	else: velocity.y += GRAVITY * gravity_mod * delta
+
+	var target_velocity = input.move_input.x * SPEED
 	
-	if event.keycode in inputs.jump: jump()
+	var accel = 0.0# ACCELERATION if target_velocity != 0.0 else STOPPING_SPEED
+	if target_velocity != 0.0: accel = ACCELERATION
+	else:
+		if is_on_floor(): accel = STOPPING_SPEED
+		else: accel = AIR_STOPPING_SPEED
+	accel *= delta
+	accel *= 1.0 if target_velocity - velocity.x > 0 else -1.0
+	if (velocity.x >= 0.0) != (target_velocity >= 0.0): accel *= TURNING_BOOST
 	
-	if event.keycode in inputs.left: movement_input.left = event.is_pressed()
-	if event.keycode in inputs.right: movement_input.right = event.is_pressed()
+	if abs(accel) < abs(abs(target_velocity) - abs(velocity.x)): velocity.x += accel
+	else: velocity.x = target_velocity
+	
+	move_and_slide()
 	return
 

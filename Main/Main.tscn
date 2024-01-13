@@ -1,15 +1,15 @@
 [gd_scene load_steps=5 format=3 uid="uid://be4o641d7hhbr"]
 
 [ext_resource type="Script" path="res://Main/Main.gd" id="1_kvqn7"]
-[ext_resource type="Script" path="res://Main/Settings.gd" id="2_3qfqa"]
 [ext_resource type="PackedScene" uid="uid://fhrxc3id4ykd" path="res://Levels/TestLevel.tscn" id="2_362m5"]
+[ext_resource type="Script" path="res://Main/Input.gd" id="2_srxte"]
 [ext_resource type="PackedScene" uid="uid://cydes0r54kwd8" path="res://UI/UI.tscn" id="3_vdcxa"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_kvqn7")
 
-[node name="Settings" type="Node" parent="."]
-script = ExtResource("2_3qfqa")
+[node name="Input" type="Node" parent="."]
+script = ExtResource("2_srxte")
 
 [node name="TestLevel" parent="." instance=ExtResource("2_362m5")]
 
