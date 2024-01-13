@@ -1,10 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cxvba774w4r6v"]
+[gd_scene load_steps=4 format=3 uid="uid://cxvba774w4r6v"]
 
 [ext_resource type="Script" path="res://PlayerCharacter/PlayerCharacter.gd" id="1_3ghtm"]
 [ext_resource type="Texture2D" uid="uid://btt1c7pr4eggv" path="res://PlayerCharacter/PlayerCharacterSpriteSheet.png" id="1_5j702"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_v7otx"]
-size = Vector2(16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mwogt"]
 size = Vector2(8, 8)
@@ -16,11 +13,12 @@ script = ExtResource("1_3ghtm")
 texture_filter = 1
 texture = ExtResource("1_5j702")
 
-[node name="Collision" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_v7otx")
-debug_color = Color(0, 0.6, 0.701961, 0.12549)
+[node name="Collision" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(0, -8, 8, 8, -8, 8)
 
 [node name="HitBox" type="Area2D" parent="."]
+position = Vector2(0, 2)
 
 [node name="Collision" type="CollisionShape2D" parent="HitBox"]
 shape = SubResource("RectangleShape2D_mwogt")
