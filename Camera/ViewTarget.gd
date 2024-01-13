@@ -3,6 +3,7 @@ extends Node2D
 class_name ViewTarget
 
 
+@export var blend_weight: float = 1.0
 @export var zoom: float = 1.0:
 	set(value):
 		zoom = value
@@ -15,5 +16,7 @@ class_name ViewTarget
 @export var speed_curve: Curve = null
 
 
-func _ready(): $DemoCamera.queue_free()
+func _ready():
+	if !Engine.is_editor_hint(): $DemoCamera.queue_free()
+	return
 
