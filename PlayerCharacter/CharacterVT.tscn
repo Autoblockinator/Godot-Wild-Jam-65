@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://byrxsvxl1jxui"]
-
-[ext_resource type="PackedScene" uid="uid://dur3ukusfxoxi" path="res://Camera/ViewTarget.tscn" id="1_an1gg"]
-[ext_resource type="Script" path="res://PlayerCharacter/CharacterVT.gd" id="2_gow8j"]
-
-[node name="CharacterVT" instance=ExtResource("1_an1gg")]
-editor_description = "Responsible for following the player character around."
-script = ExtResource("2_gow8j")
